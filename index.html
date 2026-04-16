@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>26会の皆さん、パーソリュ課へようこそ！</title>
+  <style>
+    :root {
+      --bg-main: #fff4e8;
+      --bg-sub: #ffe6cc;
+      --bg-accent: #ffd4a8;
+      --card: rgba(255, 255, 255, 0.72);
+      --card-border: rgba(255, 172, 109, 0.28);
+      --text: #5a3b25;
+      --muted: #8e6a4e;
+      --accent1: #ffb36b;
+      --accent2: #ff8fb1;
+      --accent3: #8fd8ff;
+      --accent4: #c5a2ff;
+      --shadow: 0 20px 40px rgba(210, 128, 52, 0.14);
+      --modal-shadow: 0 30px 60px rgba(124, 76, 35, 0.2);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.75), transparent 22%),
+        radial-gradient(circle at 90% 12%, rgba(255, 214, 170, 0.7), transparent 24%),
+        radial-gradient(circle at 15% 85%, rgba(255, 200, 210, 0.35), transparent 20%),
+        linear-gradient(135deg, var(--bg-main), var(--bg-sub) 55%, var(--bg-accent));
+      min-height: 100vh;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    .party-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .party-bg .confetti,
+    .party-bg .dot,
+    .party-bg .star,
+    .party-bg .balloon,
+    .party-bg .streamer {
+      position: absolute;
+      opacity: 0.9;
+    }
+
+    .party-bg .confetti {
+      width: 14px;
+      height: 32px;
+      border-radius: 999px;
+      transform: rotate(18deg);
+      filter: blur(0.2px);
+    }
+
+    .party-bg .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .party-bg .star {
+      font-size: 18px;
+      color: rgba(255, 154, 111, 0.8);
+    }
+
+    .party-bg .streamer {
+      width: 120px;
+      height: 40px;
+      border: 5px solid transparent;
+      border-top-color: rgba(255, 150, 98, 0.55);
+      border-radius: 50%;
+      transform: rotate(-20deg);
+    }
+
+    .party-bg .balloon {
+      width: 54px;
+      height: 68px;
+      border-radius: 50% 50% 46% 46%;
+      box-shadow: inset -8px -10px 0 rgba(255,255,255,0.12);
+    }
+
+    .party-bg .balloon::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 62px;
+      width: 1.5px;
+      height: 58px;
+      background: rgba(146, 109, 78, 0.35);
+    }
+
+    .party-bg .balloon::before {
+      content: "";
+      position: absolute;
+      left: calc(50% - 4px);
+      bottom: -5px;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 8px solid currentColor;
+      filter: brightness(0.95);
+    }
+
+    .container {
+      width: min(1200px, calc(100% - 32px));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      padding: 52px 0 24px;
+    }
+
+    .hero {
+      position: relative;
+      background: linear-gradient(135deg, rgba(255,255,255,0.72), rgba(255,255,255,0.48));
+      border: 1px solid rgba(255, 182, 116, 0.35);
+      border-radius: 30px;
+      padding: 34px 30px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero::before {
+      width: 220px;
+      height: 220px;
+      right: -70px;
+      top: -60px;
+      background: radial-gradient(circle, rgba(255, 180, 108, 0.28), transparent 68%);
+    }
+
+    .hero::after {
+      width: 180px;
+      height: 180px;
+      left: -50px;
+      bottom: -60px;
+      background: radial-gradient(circle, rgba(255, 143, 177, 0.22), transparent 68%);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      background: rgba(255, 179, 107, 0.2);
+      border: 1px solid rgba(255, 169, 99, 0.35);
+      color: #b8622a;
+      margin-bottom: 14px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 1.25;
+      color: #7a4a25;
+    }
+
+    .lead {
+      margin: 0;
+      max-width: 780px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    main {
+      padding: 14px 0 64px;
+    }
+
+    .guide {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+      color: #9a6a45;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .guide .icon {
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.65);
+      border: 1px solid rgba(255, 171, 99, 0.25);
+      box-shadow: 0 10px 18px rgba(199, 145, 87, 0.15);
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .photo-card {
+      position: relative;
+      padding: 14px;
+      border: 0;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.5));
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.24s ease, box-shadow 0.24s ease, border-color 0.24s ease;
+      text-align: left;
+      color: inherit;
+      overflow: hidden;
+    }
+
+    .photo-card:hover,
+    .photo-card:focus-visible {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 24px 48px rgba(204, 128, 58, 0.18);
+      outline: none;
+    }
+
+    .photo-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -30px -34px auto;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 143, 177, 0.16), transparent 70%);
+      pointer-events: none;
+    }
+
+    .photo-frame {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border-radius: 20px;
+      padding: 3px;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2), var(--accent3), var(--accent4));
+      margin-bottom: 12px;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 17px;
+      background: rgba(255,255,255,0.7);
+    }
+
+    .photo-name {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.35;
+      color: #6a4020;
+    }
+
+    .photo-role {
+      margin-top: 4px;
+      font-size: 13px;
+      color: #9b6b49;
+    }
+
+    .photo-cta {
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.66);
+      border: 1px solid rgba(255, 169, 99, 0.24);
+      color: #b1642f;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(121, 79, 47, 0.28);
+      backdrop-filter: blur(8px);
+      z-index: 20;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-panel {
+      position: relative;
+      width: min(980px, 100%);
+      max-height: min(88vh, 920px);
+      overflow: auto;
+      border-radius: 30px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,248,241,0.9));
+      border: 1px solid rgba(255, 177, 110, 0.34);
+      box-shadow: var(--modal-shadow);
+      padding: 26px;
+    }
+
+    .modal-close {
+      position: sticky;
+      top: 0;
+      margin-left: auto;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.86);
+      color: #aa6434;
+      box-shadow: 0 10px 20px rgba(196, 132, 73, 0.12);
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .modal-body {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 26px;
+      align-items: start;
+    }
+
+    .modal-photo-wrap {
+      position: sticky;
+      top: 56px;
+    }
+
+    .modal-photo-frame {
+      padding: 4px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2), var(--accent3), var(--accent4));
+      box-shadow: 0 20px 36px rgba(212, 143, 78, 0.18);
+    }
+
+    .modal-photo {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.8);
+    }
+
+    .modal-name {
+      margin: 14px 0 4px;
+      font-size: 30px;
+      line-height: 1.25;
+      color: #734423;
+    }
+
+    .modal-role {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #8d5328;
+      background: rgba(255, 192, 136, 0.28);
+      border: 1px solid rgba(255, 179, 122, 0.42);
+    }
+
+    .modal-copy {
+      display: grid;
+      gap: 14px;
+    }
+
+    .profile-box {
+      background: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255, 180, 116, 0.22);
+      border-radius: 20px;
+      padding: 16px 16px 15px;
+      box-shadow: 0 10px 18px rgba(211, 145, 85, 0.08);
+    }
+
+    .profile-box h3 {
+      margin: 0 0 8px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #c46d2b;
+    }
+
+    .profile-box p {
+      margin: 0;
+      font-size: 14px;
+      color: #6d4a2f;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      font-size: 12px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      color: #865135;
+      background: rgba(255,255,255,0.8);
+      border: 1px solid rgba(255, 183, 117, 0.28);
+      font-weight: 700;
+    }
+
+    footer {
+      padding: 8px 0 34px;
+      color: #a27453;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 1080px) {
+      .photo-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .modal-body { grid-template-columns: 240px 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      .container { width: min(100% - 20px, 1200px); }
+      header { padding-top: 24px; }
+      .hero { padding: 24px 18px; border-radius: 24px; }
+      .photo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+      .modal { padding: 12px; }
+      .modal-panel { padding: 16px; border-radius: 24px; }
+      .modal-body { grid-template-columns: 1fr; gap: 18px; }
+      .modal-photo-wrap { position: static; }
+      .modal-name { font-size: 26px; }
+    }
+
+    @media (max-width: 520px) {
+      .photo-grid { grid-template-columns: 1fr; }
+      .photo-card { padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="party-bg" aria-hidden="true">
+    <span class="balloon" style="left:4%; top:10%; color:#ffb36b; background:#ffb36b;"></span>
+    <span class="balloon" style="right:6%; top:14%; color:#ff8fb1; background:#ff8fb1; width:48px; height:62px;"></span>
+    <span class="balloon" style="left:8%; bottom:12%; color:#8fd8ff; background:#8fd8ff; width:46px; height:58px;"></span>
+    <span class="streamer" style="left:12%; top:20%; transform:rotate(12deg);"></span>
+    <span class="streamer" style="right:10%; top:22%; border-top-color:rgba(143,216,255,0.55); transform:rotate(-12deg);"></span>
+    <span class="streamer" style="left:68%; bottom:16%; border-top-color:rgba(255,143,177,0.48); transform:rotate(22deg);"></span>
+    <span class="confetti" style="left:18%; top:8%; background:#ffb36b;"></span>
+    <span class="confetti" style="left:24%; top:15%; background:#ff8fb1; transform:rotate(-26deg);"></span>
+    <span class="confetti" style="left:83%; top:18%; background:#8fd8ff; height:24px;"></span>
+    <span class="confetti" style="right:20%; top:8%; background:#c5a2ff; transform:rotate(28deg);"></span>
+    <span class="confetti" style="left:10%; bottom:28%; background:#ffd27d; height:26px;"></span>
+    <span class="confetti" style="right:14%; bottom:20%; background:#ff9ab5; transform:rotate(-18deg); width:12px;"></span>
+    <span class="dot" style="left:32%; top:9%; background:#ffd27d;"></span>
+    <span class="dot" style="left:72%; top:12%; background:#ffb0cf; width:10px; height:10px;"></span>
+    <span class="dot" style="left:78%; bottom:18%; background:#9edfff; width:14px; height:14px;"></span>
+    <span class="dot" style="left:14%; bottom:20%; background:#d1b5ff; width:9px; height:9px;"></span>
+    <span class="star" style="left:38%; top:12%;">✦</span>
+    <span class="star" style="right:28%; top:9%; color:rgba(143,216,255,0.8);">✦</span>
+    <span class="star" style="left:6%; bottom:34%; color:rgba(255,143,177,0.82);">✦</span>
+    <span class="star" style="right:8%; bottom:26%; color:rgba(255,179,107,0.85);">✦</span>
+  </div>
+
+  <div class="container">
+    <header>
+      <section class="hero">
+        <div class="eyebrow">WELCOME PARTY PROFILE</div>
+        <h1>26会の皆さん、パーソリュ課へようこそ！</h1>
+        <p class="lead">
+          まずは顔写真をクリックして、メンバーの人となりをのぞいてみてください。デジタル感の中に、やわらかさと楽しさを感じられるウェルカムページに仕上げています。
+        </p>
+      </section>
+    </header>
+
+    <main>
+      <div class="guide">
+        <span class="icon">🎉</span>
+        <span>顔写真をクリックするとプロフィールが表示されます</span>
+      </div>
+      <section class="photo-grid" id="photoGrid"></section>
+    </main>
+
+    <footer>© Welcome Profile Page</footer>
+  </div>
+
+  <div class="modal" id="profileModal" aria-hidden="true">
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalName">
+      <button class="modal-close" id="modalClose" aria-label="閉じる">×</button>
+      <div class="modal-body">
+        <div class="modal-photo-wrap">
+          <div class="modal-photo-frame">
+            <img class="modal-photo" id="modalPhoto" src="" alt="" />
+          </div>
+          <h2 class="modal-name" id="modalName"></h2>
+          <div class="modal-role" id="modalRole"></div>
+        </div>
+
+        <div class="modal-copy">
+          <section class="profile-box">
+            <h3>特技・趣味</h3>
+            <div class="chips">
+              <span class="chip" id="modalSpecialty"></span>
+              <span class="chip" id="modalHobby"></span>
+            </div>
+          </section>
+
+          <section class="profile-box">
+            <h3>略歴</h3>
+            <p id="modalBio"></p>
+          </section>
+
+          <section class="profile-box">
+            <h3>担当業務</h3>
+            <p id="modalWork"></p>
+          </section>
+
+          <section class="profile-box">
+            <h3>新卒時代に苦労したこと</h3>
+            <p id="modalStruggle"></p>
+          </section>
+
+          <section class="profile-box">
+            <h3>メッセージ</h3>
+            <p id="modalMessage"></p>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const members = [
+      {
+        name: "山田 花子",
+        role: "営業部 マネージャー",
+        specialty: "顧客提案・関係構築",
+        hobby: "カフェ巡り・旅行",
+        bio: "新卒でメーカー営業として入社後、法人営業を中心に経験を積み、現在はチームマネジメントも担当。",
+        work: "顧客折衝、提案設計、チーム育成、案件推進",
+        struggle: "最初は商談で自信を持って話せず、提案の組み立てにも苦労しました。",
+        message: "一歩ずつでも前に進めば、必ず成長できます。一緒に楽しみながら挑戦していきましょう。",
+        photo: "images/member01.jpg"
+      },
+      {
+        name: "佐藤 健",
+        role: "開発部 リーダー",
+        specialty: "フロントエンド設計",
+        hobby: "ゲーム・映画鑑賞",
+        bio: "SIerでの開発経験を経て入社。UI/UX改善とフロントエンドアーキテクチャ設計を主導。",
+        work: "画面設計、技術選定、レビュー、実装支援",
+        struggle: "新卒時代は仕様の理解が浅く、周囲に質問するタイミングをつかめませんでした。",
+        message: "分からないことを分からないままにしない姿勢が、成長の近道だと思います。",
+        photo: "images/member02.jpg"
+      },
+      {
+        name: "高橋 美咲",
+        role: "人事担当",
+        specialty: "採用企画・面談",
+        hobby: "読書・ヨガ",
+        bio: "人材業界でのコンサル経験を活かし、採用広報や育成施策の企画を担当。",
+        work: "採用、オンボーディング、研修運営、制度浸透",
+        struggle: "新卒時代はタスク管理が苦手で、優先順位付けに苦労しました。",
+        message: "不安があるのは自然なことです。安心してチャレンジできる環境をつくっていきます。",
+        photo: "images/member03.jpg"
+      },
+      {
+        name: "伊藤 翔",
+        role: "マーケティング担当",
+        specialty: "SNS運用・分析",
+        hobby: "写真撮影・音楽",
+        bio: "広告代理店でのデジタルマーケ経験を経て、現在はブランド発信と集客企画を担当。",
+        work: "施策立案、広告運用、SNS分析、コンテンツ企画",
+        struggle: "成果をすぐに出せない時期に、自分の仕事の価値を見失いがちでした。",
+        message: "小さな改善の積み重ねが大きな成果につながります。楽しみながら挑戦しましょう。",
+        photo: "images/member04.jpg"
+      },
+      {
+        name: "渡辺 彩",
+        role: "デザイナー",
+        specialty: "UIデザイン・ブランディング",
+        hobby: "イラスト・雑貨集め",
+        bio: "制作会社でWebデザインに従事後、現在はブランド体験全体の設計を担う。",
+        work: "UI設計、ビジュアル制作、デザインガイド整備",
+        struggle: "最初はフィードバックを前向きに受け止めるのが難しかったです。",
+        message: "自分らしさを大切にしながら、チームでより良いものをつくっていきましょう。",
+        photo: "images/member05.jpg"
+      },
+      {
+        name: "中村 恒一",
+        role: "コーポレート担当",
+        specialty: "業務改善・制度設計",
+        hobby: "ランニング・料理",
+        bio: "総務・経営企画を経験し、社内体制の整備や業務効率化を推進。",
+        work: "総務、制度運用、社内フロー改善、予算管理",
+        struggle: "新卒時代は、細かい確認を怠ってミスを出してしまうことがありました。",
+        message: "地道な積み重ねが信頼につながります。丁寧に、一緒に進んでいきましょう。",
+        photo: "images/member06.jpg"
+      },
+      {
+        name: "小林 由衣",
+        role: "カスタマーサクセス",
+        specialty: "課題整理・伴走支援",
+        hobby: "ドラマ鑑賞・散歩",
+        bio: "BtoB SaaSの導入支援を中心に経験を積み、現在は顧客活用支援を担当。",
+        work: "導入支援、定着化提案、問い合わせ対応、改善提案",
+        struggle: "新卒時代は相手の意図を正確に汲み取るコミュニケーションに苦労しました。",
+        message: "相手に寄り添う姿勢が何より大切です。一緒に信頼を積み上げていきましょう。",
+        photo: "images/member07.jpg"
+      },
+      {
+        name: "加藤 大樹",
+        role: "エンジニア",
+        specialty: "バックエンド開発",
+        hobby: "サウナ・読書",
+        bio: "受託開発で複数業界のシステム開発を経験し、現在は基盤構築とAPI開発を担当。",
+        work: "API開発、DB設計、性能改善、障害対応",
+        struggle: "新卒時代は、エラーの切り分けに時間がかかり、原因特定に苦戦していました。",
+        message: "失敗は成長の材料です。試して学び、前に進んでいきましょう。",
+        photo: "images/member08.jpg"
+      },
+      {
+        name: "井上 優奈",
+        role: "広報担当",
+        specialty: "情報発信・文章作成",
+        hobby: "美術館巡り・手帳",
+        bio: "PR会社で企業広報を経験し、現在は社内外への情報発信とブランド浸透を担当。",
+        work: "広報企画、記事作成、SNS発信、取材対応",
+        struggle: "新卒時代は、自分の考えを簡潔に言語化することに苦手意識がありました。",
+        message: "言葉には人を動かす力があります。想いを大切に発信していきたいです。",
+        photo: "images/member09.jpg"
+      },
+      {
+        name: "木村 恒一",
+        role: "事業企画",
+        specialty: "戦略立案・数値分析",
+        hobby: "将棋・キャンプ",
+        bio: "コンサルティング会社で事業戦略立案に従事し、現在は新規事業企画を担当。",
+        work: "市場分析、企画立案、KPI設計、推進管理",
+        struggle: "新卒時代は、完璧を求めすぎて行動が遅くなってしまうことがありました。",
+        message: "まず動くことで見える景色があります。変化を楽しみながら進みましょう。",
+        photo: "images/member10.jpg"
+      },
+      {
+        name: "清水 真帆",
+        role: "営業企画",
+        specialty: "提案資料作成・分析",
+        hobby: "パン作り・音楽ライブ",
+        bio: "営業支援部門での経験を活かし、営業活動の仕組み化と成果最大化を担当。",
+        work: "営業資料整備、数値分析、施策改善、横断連携",
+        struggle: "新卒時代は、周囲を頼ることに遠慮してしまい、一人で抱え込みがちでした。",
+        message: "チームで仕事をするからこそ、助け合いながら前向きに進めると思っています。",
+        photo: "images/member11.jpg"
+      },
+      {
+        name: "岡田 亮",
+        role: "プロジェクトマネージャー",
+        specialty: "進行管理・調整力",
+        hobby: "登山・コーヒー",
+        bio: "Web制作・システム開発案件の進行管理を多数経験し、現在は複数案件を統括。",
+        work: "進行管理、要件整理、顧客調整、品質管理",
+        struggle: "新卒時代は、関係者との調整で遠慮してしまい、意思決定を前に進めるのが難しかったです。",
+        message: "立場を超えて協力し合うことで、良い仕事は生まれます。前向きに取り組んでいきましょう。",
+        photo: "images/member12.jpg"
+      }
+    ];
+
+    const photoGrid = document.getElementById('photoGrid');
+    const modal = document.getElementById('profileModal');
+    const modalClose = document.getElementById('modalClose');
+
+    const modalPhoto = document.getElementById('modalPhoto');
+    const modalName = document.getElementById('modalName');
+    const modalRole = document.getElementById('modalRole');
+    const modalSpecialty = document.getElementById('modalSpecialty');
+    const modalHobby = document.getElementById('modalHobby');
+    const modalBio = document.getElementById('modalBio');
+    const modalWork = document.getElementById('modalWork');
+    const modalStruggle = document.getElementById('modalStruggle');
+    const modalMessage = document.getElementById('modalMessage');
+
+    photoGrid.innerHTML = members.map((member, index) => `
+      <button class="photo-card" type="button" data-index="${index}" aria-label="${member.name}のプロフィールを表示">
+        <div class="photo-frame">
+          <img src="${member.photo}" alt="${member.name}の顔写真" />
+        </div>
+        <h2 class="photo-name">${member.name}</h2>
+        <div class="photo-role">${member.role}</div>
+        <div class="photo-cta">プロフィールを見る →</div>
+      </button>
+    `).join('');
+
+    function openModal(member) {
+      modalPhoto.src = member.photo;
+      modalPhoto.alt = `${member.name}の顔写真`;
+      modalName.textContent = member.name;
+      modalRole.textContent = member.role;
+      modalSpecialty.textContent = `特技：${member.specialty}`;
+      modalHobby.textContent = `趣味：${member.hobby}`;
+      modalBio.textContent = member.bio;
+      modalWork.textContent = member.work;
+      modalStruggle.textContent = member.struggle;
+      modalMessage.textContent = member.message;
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    photoGrid.addEventListener('click', (event) => {
+      const card = event.target.closest('.photo-card');
+      if (!card) return;
+      const member = members[Number(card.dataset.index)];
+      openModal(member);
+    });
+
+    modalClose.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && modal.classList.contains('active')) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>
